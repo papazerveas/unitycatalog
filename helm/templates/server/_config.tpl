@@ -20,8 +20,14 @@ storage-root.models={{ .Values.storage.modelStorageRoot }}
 s3.bucketPath.{{ $index }}={{ $config.bucketPath }}
 s3.region.{{ $index }}={{ $config.region }}
 s3.awsRoleArn.{{ $index }}={{ $config.awsRoleArn }}
+{{- if $config.endpoint }}
+s3.endpoint.{{ $index }}={{ $config.endpoint }}
+{{- end }}
 s3.accessKey.{{ $index }}=${S3_ACCESS_KEY_{{ $index }}}
 s3.secretKey.{{ $index }}=${S3_SECRET_KEY_{{ $index }}}
+{{- if $config.sessionToken }}
+s3.sessionToken.{{ $index }}={{ $config.sessionToken }}
+{{- end }}
 {{- end }}
 
 {{- range $index, $config := .Values.storage.credentials.adls }}

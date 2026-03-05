@@ -10,10 +10,10 @@ import io.unitycatalog.server.service.credential.azure.AzureCredential;
 import io.unitycatalog.server.service.credential.azure.AzureCredentialVendor;
 import io.unitycatalog.server.service.credential.gcp.GcpCredentialVendor;
 import io.unitycatalog.server.utils.ServerProperties;
+import java.util.Optional;
 import software.amazon.awssdk.services.sts.model.Credentials;
 
 public class CloudCredentialVendor {
-
   private final AwsCredentialVendor awsCredentialVendor;
   private final AzureCredentialVendor azureCredentialVendor;
   private final GcpCredentialVendor gcpCredentialVendor;
@@ -66,7 +66,10 @@ public class CloudCredentialVendor {
                 new AwsCredentials()
                     .accessKeyId(awsSessionCredentials.accessKeyId())
                     .secretAccessKey(awsSessionCredentials.secretAccessKey())
-                    .sessionToken(awsSessionCredentials.sessionToken()));
+                    // unitycatalog-spark_2.13:0.4.0 assumes a non-null value when building
+                    // Hadoop props. Use empty string when token is not present (static keys).
+                    .sessionToken(
+                        Optional.ofNullable(awsSessionCredentials.sessionToken()).orElse("")));
 
     // Explicitly set the expiration time for the temporary credentials if it's a non-static
     // credential. For static credential, the expiration time can be nullable.

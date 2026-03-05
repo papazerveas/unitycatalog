@@ -56,7 +56,6 @@ import software.amazon.awssdk.services.sts.model.Credentials;
  * </ol>
  */
 public class AwsCredentialVendor {
-
   private final Map<NormalizedURL, S3StorageConfig> perBucketS3Configs;
   private final Map<NormalizedURL, AwsCredentialGenerator> perBucketCredGenerators =
       new ConcurrentHashMap<>();
@@ -111,8 +110,12 @@ public class AwsCredentialVendor {
       }
     }
 
-    if (config.getSessionToken() != null && !config.getSessionToken().isEmpty()) {
-      // if a session token was supplied, then we will just return static session credentials
+    if (config.getAccessKey() != null
+        && !config.getAccessKey().isEmpty()
+        && config.getSecretKey() != null
+        && !config.getSecretKey().isEmpty()) {
+      // For S3-compatible backends (e.g. MinIO), static keys should not require STS.
+      // If sessionToken is present it will be included, otherwise static key/secret are used.
       return new AwsCredentialGenerator.StaticAwsCredentialGenerator(config);
     }
 

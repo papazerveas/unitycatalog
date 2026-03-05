@@ -313,7 +313,7 @@ public class ServerProperties {
       String sessionToken = getProperty("s3.sessionToken." + i);
       String credentialGenerator = getProperty("s3.credentialGenerator." + i);
       if ((bucketPath == null || region == null || awsRoleArn == null)
-          && (accessKey == null || secretKey == null || sessionToken == null)) {
+          && (accessKey == null || secretKey == null)) {
         break;
       }
       S3StorageConfig s3StorageConfig =
