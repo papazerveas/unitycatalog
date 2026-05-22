@@ -8,6 +8,10 @@ FROM amazoncorretto:17-alpine3.20-jdk@sha256:c045f0537bc890f9e61924f33f35e9667f6
 ARG HOME
 ENV HOME=$HOME
 
+# Keep Coursier dependencies under HOME so the generated runtime classpath
+# points to files that exist in the non-root runtime image.
+ENV COURSIER_CACHE=$HOME/.cache/coursier
+
 WORKDIR $HOME
 
 COPY --parents dev/ build/ project/ examples/ server/ api/ clients/ version.sbt build.sbt ./
