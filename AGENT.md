@@ -57,3 +57,14 @@ helm dependency update ./helm
 helm package ./helm
 helm push unitycatalog-0.0.1-pre.1.tgz oci://harbor.retailzoom.local/helm
 ```
+
+# push to gitea
+
+```sh
+curl  --include --user sotos --request POST --upload-file unitycatalog-0.0.1-pre.1.tgz http://turing:3000/api/packages/platform/helm/api/charts
+
+
+helm repo add turing http://turing:3000/api/packages/platform/helm  --username sotos
+helm repo update turing
+helm search repo turing/unitycatalog --devel --versions
+```

@@ -48,3 +48,8 @@ __pycache__
 dist/
 *.egg-info/
 Pipfile
+
+
+# helm
+
+unitycatalog-*.tgz
